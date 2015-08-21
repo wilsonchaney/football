@@ -1,25 +1,30 @@
 from sklearn.cluster import KMeans
 
-# Stats to use for clustering
-stat_list = ["pass_cmp_perc","pass_td_perc","pass_int_perc","pass_yds_per_g"]
+class PlayerClusters(KMeans):
 
+    def __init__(self,n_clusters,stat_list):
+        super(PlayerClusters, self).__init__(n_clusters)
+        self.stat_list = stat_list
 
-def cluster_QBs(players):
-    global stat_list
-    data = []
-    names = []
-    for p in players:
-        pt = [p.get_passing_stat("career",stat) for stat in stat_list]
-        data.append(pt)
-        names.append(p.name)
-    k = KMeans(n_clusters=4)
-    k.fit(data)
+    def cluster_QBs(self,players,showChart=False):
+        global stat_list
+        data = []
+        names = []
+        for p in players:
+            pt = [p.get_passing_stat("career",stat) for stat in self.stat_list]
+            data.append(pt)
+            names.append(p.name)
 
-    cluster_lists = {}
-    for i in range(0,k.n_clusters):
-        cluster_lists[i] = []
+        super(PlayerClusters,self).fit(data)
 
-    for i,cluster in enumerate(k.labels_):
-        cluster_lists[cluster].append(names[i])
-    for c in cluster_lists:
-        print "Cluster #"+str(c)+":",','.join(cluster_lists[c])
+        cluster_lists = {}
+        for i in range(0,self.n_clusters):
+            cluster_lists[i] = []
+
+        for i,cluster in enumerate(self.labels_):
+            cluster_lists[cluster].append(names[i])
+        for c in cluster_lists:
+            print "Cluster #"+str(c)+":",','.join(cluster_lists[c])
+
+    def attempt_cluster_ranks(self):
+        pass
