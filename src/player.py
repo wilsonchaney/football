@@ -1,10 +1,7 @@
 from pyquery import PyQuery as pq
 import json
-
 from util import try_parse
-
 from os import path
-
 
 # Will use this to store all stats too
 class Player:
@@ -65,7 +62,7 @@ class Player:
 
     def get_cache_path(self):
         id = self.url
-        return "player_data/"+id[id.rfind("/")+1:id.rfind(".")]+".json"
+        return "scraping/data/players/"+id[id.rfind("/")+1:id.rfind(".")]+".json"
 
     def cache(self):
 
