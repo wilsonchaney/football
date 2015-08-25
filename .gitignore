@@ -59,3 +59,6 @@ target/
 
 # Cached data from scraping
 *.json
+
+# PyCharm
+.idea/
