@@ -14,10 +14,10 @@ def get_players_beginning_with(letter):
             raise Exception("Lengths must be equal!")
         n = len(player_links)
         for i in range(0,n):
-            curr_data = player_data[i].split()
+            curr_data = player_data[i].split() # len = 4 if two names, 5 if three (e.g. Norm Van Brocklin)
 
-            name = curr_data[0]+" "+curr_data[1]
-            posns = curr_data[2].split('-')
+            name = " ".join(curr_data[0:-2])
+            posns = curr_data[-2].split('-')
             url = player_links[i].get('href')
 
             player = Player(name,posns,url)
