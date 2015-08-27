@@ -24,6 +24,13 @@ def get_player_list(file_name):
             player_list.append(player)
     return player_list
 
+def get_player(player_list,player_name,player_pos):
+    filtered = [x for x in player_list if player_name in x.name and player_pos in x.posns]
+    if len(filtered) == 0:
+        print "Could not find",player_name
+        return None
+    return filtered[0]
+
 # Set to True to re-scrape the list of players.
 force_scrape_player_list = False
 
