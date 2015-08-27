@@ -4,11 +4,16 @@ from util import try_parse
 from os import path
 
 # Will use this to store all stats too
-class Player:
+class Player(object):
     def __init__(self,name,posns,url):
         self.name = name
         self.posns = posns
         self.url = url
+
+class PassingPlayer(Player):
+    # ugly way to just cast Player to PassingPlayer...
+    def __init__(self,base_player):
+        super(PassingPlayer, self).__init__(base_player.name,base_player.posns,base_player.url)
 
     def read_page(self):
 
