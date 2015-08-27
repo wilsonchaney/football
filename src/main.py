@@ -1,11 +1,10 @@
-from visuals import ScatterGen
-from clusters import PlayerClusters
-
-from scraping import get_player_list
-import matplotlib.pyplot as plt
-from player import PassingPlayer
-
 from math import atan,pi
+
+import matplotlib.pyplot as plt
+
+from clusters import PlayerClusters
+from datastorage import get_player_list
+from datastorage.player import PassingPlayer
 
 def get_player(player_list,player_name,player_pos):
     filtered = [x for x in player_list if player_name in x.name and player_pos in x.posns]
@@ -44,7 +43,7 @@ def determine_correct_k(data):
 
     print "Calculated k value:",data[idx][0]
 
-players = get_player_list("scraping/data/player_list.json")
+players = get_player_list("datastorage/data/player_list.json")
 with open("players.dat","r") as names_file:
     names = [name.strip() for name in names_file.readlines()]
 players = [PassingPlayer(get_player(players,x,"QB")) for x in names]
