@@ -67,9 +67,16 @@ class PassingPlayer(Player):
 
     def get_cache_path(self):
         id = self.url
-        return "scraping/data/players/"+id[id.rfind("/")+1:id.rfind(".")]+".json"
+        return "datastorage/data/players/"+id[id.rfind("/")+1:id.rfind(".")]+".json"
 
     def cache(self):
 
         with open(self.get_cache_path(),"w") as file:
             json.dump(self.passing_data,file)
+
+# Used for scraping player stats
+def try_parse(string):
+    try:
+        return float(string)
+    except Exception:
+        return string

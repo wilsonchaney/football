@@ -1,6 +1,9 @@
-from pyquery import PyQuery as pq
 from string import ascii_uppercase
-from src.player import Player
+
+from pyquery import PyQuery as pq
+
+from src.datastorage.player import Player
+
 
 def get_players_beginning_with(letter):
     d = pq(url='http://www.pro-football-reference.com/players/'+letter)

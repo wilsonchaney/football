@@ -2,7 +2,8 @@ from os.path import isfile
 import json
 
 from player_list_scraper import get_all_players
-from src.player import Player
+from src.datastorage.player import Player
+
 
 # In this file, we'll ensure that the player list is downloaded.
 
@@ -26,8 +27,8 @@ def get_player_list(file_name):
 # Set to True to re-scrape the list of players.
 force_scrape_player_list = False
 
-if force_scrape_player_list or not isfile("scraping/data/player_list.json"):
+if force_scrape_player_list or not isfile("datastorage/data/player_list.json"):
     print "Player list is not cached, downloading now"
-    scrape_player_list("scraping/data/player_list.json")
+    scrape_player_list("datastorage/data/player_list.json")
 else:
     print "Player list is cached, skipping download"
