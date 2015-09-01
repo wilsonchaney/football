@@ -5,7 +5,7 @@ from math import atan,pi
 from datastorage import get_player_list,get_player,player
 
 # Set these before running
-STATS_LIST = ["pass_int_perc","pass_yds_per_att","pass_cmp_perc"] # Which stats are used for clustering
+STATS_LIST = ["pass_int_perc","pass_yds_per_att"] # Which stats are used for clustering
 NUM_CLUSTERS_RANGE = [4,7] # inclusive
 
 class PlayerClusters(KMeans):
@@ -36,9 +36,10 @@ class PlayerClusters(KMeans):
 
         for i,cluster in enumerate(self.labels_):
             cluster_lists[cluster].append(names[i])
+        print "========"+str(self.n_clusters)+" Clusters"+"========"
         for c in cluster_lists:
             pass
-            # print "Cluster #"+str(c)+":",','.join(cluster_lists[c])
+            print "Cluster #"+str(c)+":",','.join(cluster_lists[c])
 
         if showChart and len(self.stat_list) is 2:
             x_vals = [pt[0] for pt in data]
@@ -94,13 +95,13 @@ def get_angle(slope1,slope2):
 
 
 # Checks for "elbow"
-def determine_correct_k(data):
+def get_correct_k(data):
     slopes = [data[i][1]-data[i-1][1] for i in range(1,len(data))]
     angles = [get_angle(slopes[i],slopes[i-1]) for i in range(1,len(slopes))]
 
     val, idx = min((val, idx+1) for (idx, val) in enumerate(angles))
 
-    print "Calculated k value:",data[idx][0]
+    return data[idx][0];
 
 players = get_player_list("datastorage/data/player_list.json")
 with open("players.dat","r") as names_file:
@@ -110,6 +111,7 @@ for p in players:
     # print "Reading",p.name
     p.read_page()
 
+# Used for plotting
 x_vals = []
 y_vals = []
 data = []
@@ -119,6 +121,6 @@ for k in range(NUM_CLUSTERS_RANGE[0]-1,NUM_CLUSTERS_RANGE[1]+2):
     x_vals.append(k)
     y_vals.append(clusters.variance)
     data.append([k,clusters.variance])
-plt.scatter(x_vals,y_vals)
-determine_correct_k(data)
-plt.show()
+#plt.scatter(x_vals,y_vals)
+print "The optimal # of clusters for these quarterbacks is",get_correct_k(data)
+#plt.show()
