@@ -2,8 +2,8 @@ from os.path import isfile
 import json
 
 from player_list_scraper import get_all_players
-from src.datastorage.player import Player
-
+import player
+print "datastorage/__init__.py"
 
 # In this file, we'll ensure that the player list is downloaded.
 
@@ -20,8 +20,8 @@ def get_player_list(file_name):
         text = file.read()
         j = json.loads(text)
         for json_object in j:
-            player = Player(**json_object)
-            player_list.append(player)
+            p = player.Player(**json_object)
+            player_list.append(p)
     return player_list
 
 def get_player(player_list,player_name,player_pos):
@@ -34,8 +34,10 @@ def get_player(player_list,player_name,player_pos):
 # Set to True to re-scrape the list of players.
 force_scrape_player_list = False
 
-if force_scrape_player_list or not isfile("datastorage/data/player_list.json"):
-    print "Player list is not cached, downloading now"
-    scrape_player_list("datastorage/data/player_list.json")
-else:
-    print "Player list is cached, skipping download"
+# Avoid running this twice!
+if __name__ == "src.datastorage":
+    if force_scrape_player_list or not isfile("datastorage/data/player_list.json"):
+        print "Player list is not cached, downloading now"
+        scrape_player_list("datastorage/data/player_list.json")
+    else:
+        print "Player list is cached, skipping download"
