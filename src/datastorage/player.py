@@ -54,7 +54,7 @@ class PassingPlayer(Player):
             self.cache()
 
     def get_years(self):
-        return [x for x in self.passing_data.keys() if x != "career"]
+        return [x for x in self.passing_data.keys() if x.isdigit()]
 
     def get_passing_stat(self,_year,_statname):
         for year,data in self.passing_data.iteritems():
