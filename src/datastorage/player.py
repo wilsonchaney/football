@@ -1,19 +1,21 @@
-from pyquery import PyQuery as pq
 import json
-from util import try_parse
 from os import path
+
+from pyquery import PyQuery as pq
+
 
 # Will use this to store all stats too
 class Player(object):
-    def __init__(self,name,posns,url):
+    def __init__(self, name, posns, url):
         self.name = name
         self.posns = posns
         self.url = url
 
+
 class PassingPlayer(Player):
     # ugly way to just cast Player to PassingPlayer...
-    def __init__(self,base_player):
-        super(PassingPlayer, self).__init__(base_player.name,base_player.posns,base_player.url)
+    def __init__(self, base_player):
+        super(PassingPlayer, self).__init__(base_player.name, base_player.posns, base_player.url)
 
     def read_page(self):
 
@@ -25,7 +27,7 @@ class PassingPlayer(Player):
                         self.passing_data[key][stat] = try_parse(self.passing_data[key][stat])
 
         else:
-            self.page = pq('http://www.pro-football-reference.com/'+self.url)
+            self.page = pq('http://www.pro-football-reference.com/' + self.url)
 
             # Populate passing data
             passing_table = self.page("div#div_passing")
@@ -36,8 +38,8 @@ class PassingPlayer(Player):
                 cells = row.findall("td")
                 row_data = {}
                 year = cells[0].text_content()[:4]
-                for i,cell in enumerate(cells[1:]):
-                    stat = headers[i+1]
+                for i, cell in enumerate(cells[1:]):
+                    stat = headers[i + 1]
                     row_data[stat] = try_parse(cell.text_content())
                 self.passing_data[year] = row_data
 
@@ -47,8 +49,8 @@ class PassingPlayer(Player):
 
             cells = career_row.findall("td")
             row_data = {}
-            for i,cell in enumerate(cells[1:]):
-                stat = headers[i+1]
+            for i, cell in enumerate(cells[1:]):
+                stat = headers[i + 1]
                 row_data[stat] = try_parse(cell.text_content())
             self.passing_data["career"] = row_data
             self.cache()
@@ -56,23 +58,24 @@ class PassingPlayer(Player):
     def get_years(self):
         return [x for x in self.passing_data.keys() if x.isdigit()]
 
-    def get_passing_stat(self,_year,_statname):
-        for year,data in self.passing_data.iteritems():
+    def get_passing_stat(self, _year, _statname):
+        for year, data in self.passing_data.iteritems():
             # print year,_year
             if year == str(_year):
                 return data[_statname]
 
     def __str__(self):
-        return self.name+" "+'-'.join(self.posns)+" "+self.url
+        return self.name + " " + '-'.join(self.posns) + " " + self.url
 
     def get_cache_path(self):
         id = self.url
-        return "datastorage/data/players/"+id[id.rfind("/")+1:id.rfind(".")]+".json"
+        return "datastorage/data/players/" + id[id.rfind("/") + 1:id.rfind(".")] + ".json"
 
     def cache(self):
 
-        with open(self.get_cache_path(),"w") as file:
-            json.dump(self.passing_data,file)
+        with open(self.get_cache_path(), "w") as file:
+            json.dump(self.passing_data, file)
+
 
 # Used for scraping player stats
 def try_parse(string):
